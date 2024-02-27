@@ -108,7 +108,7 @@ module red_pitaya_top_Z20 #(
   input  logic [ 2-1:0] daisy_p_i  ,  // line 1 is clock capable
   input  logic [ 2-1:0] daisy_n_i  ,
   // LED
-  inout  logic [ 8-1:0] led_o  //ahe
+  inout  logic [ 8-1:0] led_o2  //ahe
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -358,7 +358,8 @@ red_pitaya_ams i_ams (
   .sys_err         (sys[4].err  ),
   .sys_ack         (sys[4].ack  )
 );
-
+//ahe - remove module
+/*
 red_pitaya_pdm pdm (
   // system signals
   .clk   (adc_clk ),
@@ -370,6 +371,7 @@ red_pitaya_pdm pdm (
   // PWM outputs
   .pdm (dac_pwm_o)
 );
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 // ADC IO
@@ -438,7 +440,7 @@ red_pitaya_hk i_hk (
   .clk_i           (adc_clk ),  // clock
   .rstn_i          (adc_rstn),  // reset - active low
   // LED
-  .led_o           (  led_o                      ),  // LED output //ahe
+  //.led_o           (  led_o                      ),  // LED output //ahe
   // global configuration
   .digital_loop    (digital_loop),
   .daisy_mode_o    (daisy_mode),
