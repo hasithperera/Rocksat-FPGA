@@ -103,12 +103,12 @@ module red_pitaya_top_Z20 #(
   inout  logic [ 8-1:0] exp_p_io   ,
   inout  logic [ 8-1:0] exp_n_io   ,
   // SATA connector
-  output logic [ 2-1:0] daisy_p_o  ,  // line 1 is clock capable
-  output logic [ 2-1:0] daisy_n_o  ,
-  input  logic [ 2-1:0] daisy_p_i  ,  // line 1 is clock capable
-  input  logic [ 2-1:0] daisy_n_i  ,
+  //output logic [ 2-1:0] daisy_p_o  ,  // line 1 is clock capable
+  //output logic [ 2-1:0] daisy_n_o  ,
+  //input  logic [ 2-1:0] daisy_p_i  ,  // line 1 is clock capable
+  //input  logic [ 2-1:0] daisy_n_i  ,
   // LED
-  inout  logic [ 8-1:0] led_o2  //ahe
+  inout  logic [ 8-1:0] led_o  //ahe
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -193,6 +193,15 @@ SBA_T [2-1:0]            pid_dat;
 
 // configuration
 logic                    digital_loop;
+
+//ahe
+logic dac_lf;
+logic [32-1:0]cntr;
+logic tmp; 
+logic debug1;
+logic debug2;
+
+logic [8-1:0] exp_n_out_ahe; // ahe - used to disable internal functions
 
 // system bus
 sys_bus_if   ps_sys      (.clk (adc_clk), .rstn (adc_rstn));
@@ -348,7 +357,7 @@ red_pitaya_ams i_ams (
   .dac_a_o         (pdm_cfg[0]),
   .dac_b_o         (pdm_cfg[1]),
   .dac_c_o         (pdm_cfg[2]),
-  .dac_d_o         (pdm_cfg[3]),
+  .dac_d_o         (dac_lf),
   // System bus
   .sys_addr        (sys[4].addr ),
   .sys_wdata       (sys[4].wdata),
@@ -358,8 +367,9 @@ red_pitaya_ams i_ams (
   .sys_err         (sys[4].err  ),
   .sys_ack         (sys[4].ack  )
 );
-//ahe - remove module
-/*
+
+//ahe - USED to set slow DAC values
+
 red_pitaya_pdm pdm (
   // system signals
   .clk   (adc_clk ),
@@ -371,7 +381,37 @@ red_pitaya_pdm pdm (
   // PWM outputs
   .pdm (dac_pwm_o)
 );
+
+/*
+entity test1 is
+  port (
+    gateway_in : in std_logic_vector( 1-1 downto 0 );
+    clk : in std_logic;
+    counter : out std_logic_vector( 32-1 downto 0 );
+    debug_1 : out std_logic_vector( 1-1 downto 0 );
+    debug_2 : out std_logic_vector( 1-1 downto 0 );
+    led_out : out std_logic_vector( 8-1 downto 0 )
+  );
+end test1;
+
+//old version
+entity test1 is
+  port (
+    gateway_in : in std_logic_vector( 1-1 downto 0 );
+    clk : in std_logic;
+    counter : out std_logic_vector( 32-1 downto 0 );
+    led_out : out std_logic_vector( 8-1 downto 0 )
+  );
+end test1;
 */
+test1 ahe_uut(
+ .gateway_in (tmp),
+ .clk (fclk[2]),
+ .counter (cnt),
+ .debug_1 (exp_n_out_ahe[1]),
+ .debug_2 (exp_n_out_ahe[2]),
+ .led_out (led_o)
+);
 
 ////////////////////////////////////////////////////////////////////////////////
 // ADC IO
@@ -494,7 +534,14 @@ end
 endgenerate
 
 IOBUF i_iobufp [DWE-1:0] (.O(exp_p_in), .IO(exp_p_io), .I(exp_p_otr), .T(~exp_p_dtr) );
-IOBUF i_iobufn [DWE-1:0] (.O(exp_n_in), .IO(exp_n_io), .I(exp_n_otr), .T(~exp_n_dtr) );
+IOBUF i_iobufn [DWE-1:0] (.O(exp_n_in), .IO(exp_n_io), .I(exp_n_out_ahe), .T(~exp_n_dtr) );
+
+
+// ahe - isolate from python
+//logic [8-1:0] E1_n_in;
+//logic [8-1:0] E1_n_out;
+//IOBUF i_iobufn [8-1:0] (.O(E1_n_out), .IO(exp_p_io), .I(E1_n_in), .T(~exp_p_dtr) );
+
 
 assign gpio.i[2*GDW-1:  GDW] = exp_p_in[GDW-1:0];
 assign gpio.i[3*GDW-1:2*GDW] = exp_n_in[GDW-1:0];
@@ -587,45 +634,45 @@ red_pitaya_pid i_pid (
 // Daisy test code
 ////////////////////////////////////////////////////////////////////////////////
 
-wire daisy_rx_rdy ;
-wire dly_clk = fclk[3]; // 200MHz clock from PS - used for IDELAY (optionaly)
-wire [16-1:0] par_dati = daisy_mode[0] ? {16{trig_output_sel}} : 16'h1234;
-wire          par_dvi  = daisy_mode[0] ? 1'b0 : daisy_rx_rdy;
+//wire daisy_rx_rdy ;
+//wire dly_clk = fclk[3]; // 200MHz clock from PS - used for IDELAY (optionaly)
+//wire [16-1:0] par_dati = daisy_mode[0] ? {16{trig_output_sel}} : 16'h1234;
+//wire          par_dvi  = daisy_mode[0] ? 1'b0 : daisy_rx_rdy;
 
-red_pitaya_daisy i_daisy (
-   // SATA connector
-  .daisy_p_o       (  daisy_p_o                  ),  // line 1 is clock capable
-  .daisy_n_o       (  daisy_n_o                  ),
-  .daisy_p_i       (  daisy_p_i                  ),  // line 1 is clock capable
-  .daisy_n_i       (  daisy_n_i                  ),
-   // Data
-  .ser_clk_i       (  ser_clk                    ),  // high speed serial
-  .dly_clk_i       (  dly_clk                    ),  // delay clock
-   // TX
-  .par_clk_i       (  adc_clk                    ),  // data paralel clock
-  .par_rstn_i      (  adc_rstn                   ),  // reset - active low
-  .par_rdy_o       (  daisy_rx_rdy               ),
-  .par_dv_i        (  par_dvi                    ),
-  .par_dat_i       (  par_dati                   ),
-   // RX
-  .par_clk_o       ( adc_clk_daisy               ),
-  .par_rstn_o      (                             ),
-  .par_dv_o        (                             ),
-  .par_dat_o       ( par_dat                     ),
+//red_pitaya_daisy i_daisy (
+//   // SATA connector
+//  .daisy_p_o       (  daisy_p_o                  ),  // line 1 is clock capable
+//  .daisy_n_o       (  daisy_n_o                  ),
+//  .daisy_p_i       (  daisy_p_i                  ),  // line 1 is clock capable
+//  .daisy_n_i       (  daisy_n_i                  ),
+//   // Data
+//  .ser_clk_i       (  ser_clk                    ),  // high speed serial
+//  .dly_clk_i       (  dly_clk                    ),  // delay clock
+//   // TX
+//  .par_clk_i       (  adc_clk                    ),  // data paralel clock
+//  .par_rstn_i      (  adc_rstn                   ),  // reset - active low
+//  .par_rdy_o       (  daisy_rx_rdy               ),
+//  .par_dv_i        (  par_dvi                    ),
+//  .par_dat_i       (  par_dati                   ),
+//   // RX
+//  .par_clk_o       ( adc_clk_daisy               ),
+//  .par_rstn_o      (                             ),
+//  .par_dv_o        (                             ),
+//  .par_dat_o       ( par_dat                     ),
 
-  .sync_mode_i     (  daisy_mode[0]              ),
-  .debug_o         (/*led_o*/                    ),
-   // System bus
-  .sys_clk_i       (  adc_clk                    ),  // clock
-  .sys_rstn_i      (  adc_rstn                   ),  // reset - active low
-  .sys_addr_i      (  sys[5].addr                ),
-  .sys_sel_i       (                             ),
-  .sys_wdata_i     (  sys[5].wdata               ),
-  .sys_wen_i       (  sys[5].wen                 ),
-  .sys_ren_i       (  sys[5].ren                 ),
-  .sys_rdata_o     (  sys[5].rdata               ),
-  .sys_err_o       (  sys[5].err                 ),
-  .sys_ack_o       (  sys[5].ack                 )
-);
+//  .sync_mode_i     (  daisy_mode[0]              ),
+//  .debug_o         (/*led_o*/                    ),
+//   // System bus
+//  .sys_clk_i       (  adc_clk                    ),  // clock
+//  .sys_rstn_i      (  adc_rstn                   ),  // reset - active low
+//  .sys_addr_i      (  sys[5].addr                ),
+//  .sys_sel_i       (                             ),
+//  .sys_wdata_i     (  sys[5].wdata               ),
+//  .sys_wen_i       (  sys[5].wen                 ),
+//  .sys_ren_i       (  sys[5].ren                 ),
+//  .sys_rdata_o     (  sys[5].rdata               ),
+//  .sys_err_o       (  sys[5].err                 ),
+//  .sys_ack_o       (  sys[5].ack                 )
+//);
 
 endmodule: red_pitaya_top_Z20
