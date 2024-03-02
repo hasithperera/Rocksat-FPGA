@@ -6,7 +6,7 @@
 cd ./redpitaya.runs/impl_1
 pwd
 echo "done"
-#echo -n "all:{ red_pitaya_top_Z20.bit }" >  red_pitaya_top.bif
+echo -n "all:{ red_pitaya_top_Z20.bit }" >  red_pitaya_top.bif
 ls -lah red_pitaya_top.bif
 bootgen -image red_pitaya_top.bif -arch zynq -process_bitstream bin -w
 
