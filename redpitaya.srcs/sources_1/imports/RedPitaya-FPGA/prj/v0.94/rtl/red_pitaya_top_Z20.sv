@@ -108,7 +108,7 @@ module red_pitaya_top_Z20 #(
   //input  logic [ 2-1:0] daisy_p_i  ,  // line 1 is clock capable
   //input  logic [ 2-1:0] daisy_n_i  ,
   // LED
-  inout  logic [ 8-1:0] led_o  //ahe
+  inout logic [ 8-1:0] led_o  //ahe
 );
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -194,12 +194,13 @@ SBA_T [2-1:0]            pid_dat;
 // configuration
 logic                    digital_loop;
 
-//ahe
+//ahe - signal definitions for internal routing
 logic dac_lf;
 logic [32-1:0]cntr;
 logic tmp; 
 logic debug1;
 logic debug2;
+logic [7:0]python_led_data;
 
 logic [8-1:0] exp_n_out_ahe; // ahe - used to disable internal functions
 
@@ -394,24 +395,42 @@ entity test1 is
   );
 end test1;
 
-//old version
-entity test1 is
-  port (
-    gateway_in : in std_logic_vector( 1-1 downto 0 );
-    clk : in std_logic;
-    counter : out std_logic_vector( 32-1 downto 0 );
-    led_out : out std_logic_vector( 8-1 downto 0 )
-  );
-end test1;
 */
-test1 ahe_uut(
- .gateway_in (tmp),
- .clk (fclk[2]),
- .counter (cnt),
- .debug_1 (exp_n_out_ahe[1]),
- .debug_2 (exp_n_out_ahe[2]),
- .led_out (led_o)
-);
+//////////////////////////////////
+// PWM matlab function test
+// removed for other testing
+//test1 ahe_uut0(
+// .gateway_in (tmp),
+// .clk (fclk[2]),
+// .counter (cnt),
+// .debug_1 (exp_n_out_ahe[1]),
+// .debug_2 (exp_n_out_ahe[2]),
+// .led_out (led_o)
+//);
+
+// CMD1 testing
+
+cmd1 ahe_uut2(
+  .clk (adc_clk),
+  .python_led_data (python_led_data),
+  .led (led_o),
+  .pwm0 (exp_n_out_ahe[1]),
+  .pwm1 (exp_n_out_ahe[2]),
+  .pwm2 (exp_n_out_ahe[3])
+ );
+
+
+// RocksatX - testing program
+// using python interface
+
+//cmd_ahe ahe_uut1(
+//  .clk (fclk[2]), //50 MHz clock
+//  .python_led_data (python_led_data),
+//  .led (led_o),
+//  .pwm0 (exp_n_out_ahe[1]),
+//  .pwm1 (exp_n_out_ahe[2]),
+//  .pwm2 (exp_n_out_ahe[3])
+//);
 
 ////////////////////////////////////////////////////////////////////////////////
 // ADC IO
@@ -475,12 +494,17 @@ logic [DWE-1: 0] exp_p_alt,  exp_n_alt;
 logic [DWE-1: 0] exp_p_altr, exp_n_altr;
 logic [DWE-1: 0] exp_p_altd, exp_n_altd;
 
+
+
 red_pitaya_hk i_hk (
   // system signals
   .clk_i           (adc_clk ),  // clock
   .rstn_i          (adc_rstn),  // reset - active low
   // LED
-  //.led_o           (  led_o                      ),  // LED output //ahe
+  // Use the python interface to send 8 bit data
+  //.led_o           (led_o),  // LED output //ahe
+  
+  .led_o (python_led_data), // internal registor data
   // global configuration
   .digital_loop    (digital_loop),
   .daisy_mode_o    (daisy_mode),
@@ -502,6 +526,7 @@ red_pitaya_hk i_hk (
   .sys_err         (sys[0].err  ),
   .sys_ack         (sys[0].ack  )
 );
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // LED
