@@ -1,0 +1,12 @@
+
+{ 
+    crc :  3856121147163044413  , 
+    ccp_crc :  0  , 
+    cmdline : " --incr --debug typical --relax --mt 8 -L xil_defaultlib -L lib_cdc_v1_0_2 -L proc_sys_reset_v5_0_13 -L axi_infrastructure_v1_1_0 -L axi_vip_v1_1_7 -L processing_system7_vip_v1_0_9 -L xlconstant_v1_1_7 -L generic_baseblocks_v2_1_0 -L fifo_generator_v13_2_7 -L axi_data_fifo_v2_1_25 -L axi_register_slice_v2_1_26 -L axi_protocol_converter_v2_1_26 -L uvm -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot red_pitaya_top_Z20_behav xil_defaultlib.red_pitaya_top_Z20 xil_defaultlib.glbl" , 
+    buildDate : "Apr 18 2022" , 
+    buildTime : "15:53:03" , 
+    linkCmd : "/usr/bin/gcc -Wa,-W  -O -fPIC  -m64  -Wl,--no-as-needed  -Wl,--unresolved-symbols=ignore-all  -o \"xsim.dir/red_pitaya_top_Z20_behav/xsimk\"   \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_0.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_1.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_2.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_3.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_4.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_5.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_6.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_7.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_8.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_9.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_10.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_11.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_12.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_13.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_14.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_15.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_16.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_17.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_18.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_19.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_20.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_21.lnx64.o\" \"xsim.dir/red_pitaya_top_Z20_behav/obj/xsim_22.lnx64.o\" -L\"/opt/Xilinx/Vivado/2022.1/lib/lnx64.o\" -lrdi_simulator_kernel   -lrdi_simbridge_kernel" , 
+    aggregate_nets : 
+    [ 
+    ] 
+} 

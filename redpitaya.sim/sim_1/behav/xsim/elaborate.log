@@ -1,0 +1,23 @@
+Vivado Simulator v2022.1
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /opt/Xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab --incr --debug typical --relax --mt 8 -L xil_defaultlib -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot ahe_tb_behav xil_defaultlib.ahe_tb xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package ieee.std_logic_arith
+Compiling package ieee.std_logic_unsigned
+Compiling module xil_defaultlib.glbl
+Compiling architecture behavioral of entity xil_defaultlib.cntr_ahe [cntr_ahe_default]
+Compiling architecture behavioral of entity xil_defaultlib.mux_ahe [mux_ahe_default]
+Compiling architecture behavioral of entity xil_defaultlib.pwm_ahe [pwm_ahe_default]
+Compiling architecture behavioral of entity xil_defaultlib.cmd1 [cmd1_default]
+Compiling architecture behavioral of entity xil_defaultlib.ahe_tb
+Built simulation snapshot ahe_tb_behav
