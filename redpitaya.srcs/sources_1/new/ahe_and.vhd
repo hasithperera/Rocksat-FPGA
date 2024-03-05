@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 03/03/2024 05:58:13 PM
+-- Create Date: 03/03/2024 11:49:15 AM
 -- Design Name: 
--- Module Name: cntr_ahe - Behavioral
+-- Module Name: ahe_and - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -21,8 +21,6 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -33,31 +31,16 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity cntr_ahe is
-GENERIC ( n : NATURAL := 32 );
-Port ( 
-clk: in std_logic;
-cnt: out std_logic_vector(n-1 downto 0);
-rst: in std_logic
+entity ahe_and is
+--  Port ( );
+port(
+a,b: in std_logic;
+c: out std_logic
 );
-end cntr_ahe;
+end ahe_and;
 
-architecture Behavioral of cntr_ahe is
-signal tmp_cnt: std_logic_vector(n-1 downto 0):= (others => '0');
-
+architecture Behavioral of ahe_and is
+   
 begin
-
-
-
-process(rst,clk)
-begin
-    if rst = '1' then
-        tmp_cnt <=  (others => '0');
-    elsif (clk'event AND clk = '1') then
-        tmp_cnt <= tmp_cnt + 1;
-    end if;
-    
-end process;
-cnt <= tmp_cnt;
-
+ c <= a and b;
 end Behavioral;

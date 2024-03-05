@@ -1,4 +1,0 @@
-Running: xsim.dir/red_pitaya_top_Z20_behav/xsimk -simmode gui -wdb red_pitaya_top_Z20_behav.wdb -simrunnum 0 -socket 41683
-Design successfully loaded
-Design Loading Memory Usage: 47008 KB (Peak: 47008 KB)
-Design Loading CPU Usage: 60 ms

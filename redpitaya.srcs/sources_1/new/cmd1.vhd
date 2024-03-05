@@ -88,19 +88,17 @@ cnt => tmp_cnt
 
 led(7 downto 4) <= tmp_cnt(3 downto 0);
 led(3 downto 0) <= python_led_data(3 downto 0);
---pwm0 <= tmp_cnt(0);
---255pwm1 <= tmp_cnt(8);
---pwm2 <= tmp_cnt(21);
+
 mux_0: mux_ahe generic map(32) 
 port map(
 --x0 => x"008a1790",
 --x1 => x"008eab70",
 --x2 => x"00839b68",
 --x3 => x"008a1790",
-x0 => x"00000005",
-x1 => x"00000006",
-x2 => x"00000002",
-x3 => x"00000003",
+x0 => x"0000000E",
+x1 => x"00000008",
+x2 => x"00000005",
+x3 => x"00000001",
 en => '1',
 s => python_led_data(2 downto 1),
 y => duty_pwm0
@@ -113,7 +111,7 @@ port map(
 clk => clk,
 en =>  '1',
 duty => duty_pwm0 ,
-freq => x"000000ff",
+freq => x"0000000f",
 --freq => -x"00BEBC20",
 y => pwm0
 );

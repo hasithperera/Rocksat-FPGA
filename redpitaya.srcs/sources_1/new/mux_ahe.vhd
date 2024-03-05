@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 03/03/2024 05:58:13 PM
+-- Create Date: 03/03/2024 11:17:05 AM
 -- Design Name: 
--- Module Name: cntr_ahe - Behavioral
+-- Module Name: mux_ahe - Behavioral
 -- Project Name: 
 -- Target Devices: 
 -- Tool Versions: 
@@ -21,8 +21,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+USE ieee.std_logic_unsigned.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -33,31 +32,24 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity cntr_ahe is
+entity mux_ahe is
 GENERIC ( n : NATURAL := 32 );
 Port ( 
-clk: in std_logic;
-cnt: out std_logic_vector(n-1 downto 0);
-rst: in std_logic
+x0,x1,x2,x3: in std_logic_vector(n-1 downto 0);
+s: in std_logic_vector(2-1 downto 0):="00";
+en: in std_logic;
+y: out std_logic_vector(n-1 downto 0)
 );
-end cntr_ahe;
+end mux_ahe;
 
-architecture Behavioral of cntr_ahe is
-signal tmp_cnt: std_logic_vector(n-1 downto 0):= (others => '0');
-
+architecture Behavioral of mux_ahe is
+signal tmp_y: std_logic_vector(3-1 downto 0);
 begin
-
-
-
-process(rst,clk)
-begin
-    if rst = '1' then
-        tmp_cnt <=  (others => '0');
-    elsif (clk'event AND clk = '1') then
-        tmp_cnt <= tmp_cnt + 1;
-    end if;
-    
-end process;
-cnt <= tmp_cnt;
-
+    tmp_y <= en & s;
+    with tmp_y select y <=
+        x0 when "100",
+        x1 when  "101",
+        x2 when "110",
+        x3 when "111",
+        (OTHERS => '0') when others;
 end Behavioral;
