@@ -56,13 +56,15 @@ begin
 if (clk'event AND clk = '1') then
         if (cnt < freq) then
             cnt <= cnt + 1;
-            if (cnt < duty) then
-                y_tmp <= '1';
-            else
-                y_tmp <='0';
-            end if;
+       
         else
             cnt <= (others => '0');
+        end if;
+        
+        if (cnt < duty) then
+                y_tmp <= '1';
+        else
+                y_tmp <='0';
         end if;
 end if;
 

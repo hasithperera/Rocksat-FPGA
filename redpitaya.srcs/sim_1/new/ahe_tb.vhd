@@ -60,8 +60,7 @@ Port (
   clk: in std_logic;
   python_led_data: in std_logic_vector(7 downto 0);
   led: out std_logic_vector(7 downto 0);
-  pwm0,pwm1,pwm2: out std_logic;
-  tmp: out std_logic_vector(32-1 downto 0)
+  pwm0,pwm1,pwm2: out std_logic
  );
 end component;
 
@@ -98,8 +97,7 @@ begin
     led =>tmp_pwm,
     pwm0 => p0,
     pwm1 => p1,
-    pwm2 => p2,
-    tmp => tmp_sim
+    pwm2 => p2
     
     );
     

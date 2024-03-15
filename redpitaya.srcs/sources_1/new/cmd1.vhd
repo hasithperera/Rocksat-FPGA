@@ -36,8 +36,8 @@ Port (
   clk: in std_logic;
   python_led_data: in std_logic_vector(7 downto 0);
   led: out std_logic_vector(7 downto 0);
-  pwm0,pwm1,pwm2: out std_logic;
-  tmp: out std_logic_vector(32-1 downto 0)
+  pwm0,pwm1,pwm2: out std_logic
+  -- tmp: out std_logic_vector(32-1 downto 0) -- TB definition
  );
 end cmd1;
 
@@ -86,34 +86,62 @@ rst => '0',
 cnt => tmp_cnt
 );
 
+-- debug leds1 - works (5/3/24)
 led(7 downto 4) <= tmp_cnt(3 downto 0);
 led(3 downto 0) <= python_led_data(3 downto 0);
 
-mux_0: mux_ahe generic map(32) 
+--led <= duty_pwm0(7 downto 0);
+
+-- confirm operation of pins
+--pwm1 <= tmp_cnt(8);
+--pwm2 <= tmp_cnt(9);
+
+--led <= duty_pwm0(7 downto 0);
+
+mux_3: mux_ahe generic map(32) 
 port map(
---x0 => x"008a1790",
---x1 => x"008eab70",
---x2 => x"00839b68",
---x3 => x"008a1790",
-x0 => x"0000000E",
-x1 => x"00000008",
-x2 => x"00000005",
-x3 => x"00000001",
+x0 => x"0002A3d7",
+x1 => x"0002bccc",
+x2 => x"00028333",
+x3 => x"0002a3d7",
+---- TB sim values
+--x0 => x"0000000E",
+--x1 => x"00000008",
+--x2 => x"00000005",
+--x3 => x"00000001",
 en => '1',
 s => python_led_data(2 downto 1),
 y => duty_pwm0
 );
 
-tmp <= duty_pwm0;
 
-pwm0_uut: pwm_ahe generic map(32)
+pwm3_uut: pwm_ahe generic map(32)
 port map(
 clk => clk,
 en =>  '1',
-duty => duty_pwm0 ,
-freq => x"0000000f",
---freq => -x"00BEBC20",
-y => pwm0
+duty => duty_pwm0,
+--freq => x"0000000f", -- for TB use
+freq => x"00258000",
+y => pwm2
 );
+
+
+--pwm1_uut: pwm_ahe generic map(32)
+--port map(
+--clk => clk,
+--en =>  '1',
+--duty => duty_pwm0 ,
+--freq => x"00025800",
+--y => pwm1
+--);
+
+--pwm2_uut: pwm_ahe generic map(32)
+--port map(
+--clk => clk,
+--en =>  '1',
+--duty => duty_pwm0 ,
+--freq => x"00025800",
+--y => pwm2
+--);
 
 end Behavioral;
