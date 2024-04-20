@@ -76,7 +76,7 @@ end component;
 
 signal tmp_cnt: std_logic_vector(32-1 downto 0);
 signal tmp_rst: std_logic;
-signal duty_pwm0: std_logic_vector(32-1 downto 0);
+signal duty_pwm0,duty_pwm1,duty_pwm2: std_logic_vector(32-1 downto 0);
 
 begin
 
@@ -87,61 +87,71 @@ cnt => tmp_cnt
 );
 
 -- debug leds1 - works (5/3/24)
-led(7 downto 4) <= tmp_cnt(3 downto 0);
+led(7 downto 4) <= tmp_cnt(23 downto 20);
 led(3 downto 0) <= python_led_data(3 downto 0);
 
---led <= duty_pwm0(7 downto 0);
+-- Final 3 PWM drive units
 
--- confirm operation of pins
---pwm1 <= tmp_cnt(8);
---pwm2 <= tmp_cnt(9);
-
---led <= duty_pwm0(7 downto 0);
-
-mux_3: mux_ahe generic map(32) 
+mux_0: mux_ahe generic map(32) 
 port map(
-x0 => x"0002A3d7",
-x1 => x"0002bccc",
-x2 => x"00028333",
-x3 => x"0002a3d7",
----- TB sim values
---x0 => x"0000000E",
---x1 => x"00000008",
---x2 => x"00000005",
---x3 => x"00000001",
+x0 => x"0002C363", -- stop_0
+x1 => x"0002E23D", -- fwd_0
+x2 => x"0002C363", -- stop_0
+x3 => x"00029570", -- rev_0
 en => '1',
 s => python_led_data(2 downto 1),
 y => duty_pwm0
 );
-
-
-pwm3_uut: pwm_ahe generic map(32)
+pwm0_gen: pwm_ahe generic map(32)
 port map(
 clk => clk,
 en =>  '1',
 duty => duty_pwm0,
 --freq => x"0000000f", -- for TB use
 freq => x"00258000",
+y => pwm0
+);
+
+mux_1: mux_ahe generic map(32) 
+port map(
+x0 => x"0002B429", -- stop_1
+x1 => x"0002CB33", -- fwd_1
+x2 => x"0002B429", -- stop_1
+x3 => x"00029570", -- rev_1
+en => '1',
+s => python_led_data(2 downto 1),
+y => duty_pwm1
+);
+pwm1_gen: pwm_ahe generic map(32)
+port map(
+clk => clk,
+en =>  '1',
+duty => duty_pwm1,
+--freq => x"0000000f", -- for TB use
+freq => x"00258000",
+y => pwm1
+);
+
+mux_2: mux_ahe generic map(32) 
+port map(
+x0 => x"0002B70A", -- stop_2
+x1 => x"0002D0F5", -- fwd_2
+x2 => x"0002B70A", -- stop_2
+x3 => x"00029570", -- rev_2
+en => '1',
+s => python_led_data(2 downto 1),
+y => duty_pwm2
+);
+pwm2_gen: pwm_ahe generic map(32)
+port map(
+clk => clk,
+en =>  '1',
+duty => duty_pwm2,
+--freq => x"0000000f", -- for TB use
+freq => x"00258000",
 y => pwm2
 );
 
-
---pwm1_uut: pwm_ahe generic map(32)
---port map(
---clk => clk,
---en =>  '1',
---duty => duty_pwm0 ,
---freq => x"00025800",
---y => pwm1
---);
-
---pwm2_uut: pwm_ahe generic map(32)
---port map(
---clk => clk,
---en =>  '1',
---duty => duty_pwm0 ,
---freq => x"00025800",
---y => pwm2
---);
+-- ahe End of final drive units 
 
 end Behavioral;

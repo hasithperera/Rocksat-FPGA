@@ -29,7 +29,8 @@
 module red_pitaya_hk #(
   parameter DWL = 8, // data width for LED
   parameter DWE = 8, // data width for extension
-  parameter [57-1:0] DNA = 57'h0823456789ABCDE
+  //parameter [57-1:0] DNA = 57'h0823456789ABCDE
+  parameter [57-1:0] DNA = 57'h0823456789AAAAA
 )(
   // system signals
   input                clk_i      ,  // clock
