@@ -203,6 +203,8 @@ logic debug2;
 logic [7:0]python_led_data;
 
 logic [8-1:0] exp_n_out_ahe; // ahe - used to disable internal functions
+logic [14-1:0] ahe_dac_a; //ahe-asg workaround 
+
 
 // system bus
 sys_bus_if   ps_sys      (.clk (adc_clk), .rstn (adc_rstn));
@@ -419,6 +421,11 @@ cmd1 ahe_uut2(
   .pwm2 (exp_n_out_ahe[3])
  );
 
+ahe_TX ahe_uut3(
+    .clk (adc_clk),
+  //  .rnd_in (),
+    .rnd_out (asg_dat[0])
+);
 
 // RocksatX - testing program
 // using python interface
@@ -616,7 +623,8 @@ red_pitaya_scope_Z20 i_scope (
 
 red_pitaya_asg i_asg (
    // DAC
-  .dac_a_o         (asg_dat[0]  ),  // CH 1
+  //.dac_a_o         (asg_dat[0]  ),  // CH 1 
+  .ahe_dac_a_o        (ahe_dac_a ),  // CH 1  //ahe-asg
   .dac_b_o         (asg_dat[1]  ),  // CH 2
   .dac_clk_i       (adc_clk     ),  // clock
   .dac_rstn_i      (adc_rstn    ),  // reset - active low

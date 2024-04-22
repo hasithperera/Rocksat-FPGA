@@ -50,7 +50,7 @@
 
 module red_pitaya_asg (
   // DAC
-  output     [ 14-1: 0] dac_a_o   ,  // DAC data CHA
+  output     [ 14-1: 0] ahe_dac_a_o   ,  // DAC data CHA
   output     [ 14-1: 0] dac_b_o   ,  // DAC data CHB
   input                 dac_clk_i ,  // DAC clock
   input                 dac_rstn_i,  // DAC reset - active low
@@ -64,12 +64,18 @@ module red_pitaya_asg (
   input                 sys_ren   ,  // bus read enable
   output reg [ 32-1: 0] sys_rdata ,  // bus read data
   output reg            sys_err   ,  // bus error indicator
-  output reg            sys_ack      // bus acknowledge signal
+  output reg            sys_ack   ,  // bus acknowledge signal
+  
+  //ahe 
+  input [14-1: 0 ] ahe_dac_a_in
 );
 
 //---------------------------------------------------------------------------------
 //
 // generating signal from DAC table 
+
+//ahe
+reg [14-1:0] dac_a_o;
 
 localparam RSZ = 14 ;  // RAM size 2^RSZ
 
@@ -101,7 +107,7 @@ reg   [  20-1: 0] set_deb_len  ;
 
 red_pitaya_asg_ch  #(.RSZ (RSZ)) ch [1:0] (
   // DAC
-  .dac_o           ({dac_b_o          , dac_a_o          }),  // dac data output
+  .dac_o           ({dac_b_o          , ahe_dac_a_o          }),  // dac data output
   .dac_clk_i       ({dac_clk_i        , dac_clk_i        }),  // dac clock
   .dac_rstn_i      ({dac_rstn_i       , dac_rstn_i       }),  // dac reset - active low
   // trigger
